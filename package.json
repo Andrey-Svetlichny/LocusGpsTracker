@@ -1,0 +1,14 @@
+{
+  "name": "gps-tracker",
+  "version": "1.0.0",
+  "description": "GPS Tracking server for Locus Map Pro",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Andrey Svetlichny",
+  "license": "ISC",
+  "dependencies": {
+  }
+}
