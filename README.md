@@ -10,5 +10,21 @@ Usially I fly out of roads, so map is blank, interface on the phone screen is no
 On other hand, for many years I'm using Locus Map Pro (android) for my travels, and I like it a lot.
 I wrote to Locus support about possibility to show my custom data on Locus screen and surprisingly almost immediately got the answer how to do it in a simple way (thanks to Jiří M. aka Menion). So I implemented this service and put it to AWS, but any server with Node support can be used.
 
-## How it work
+## How it works
 Tracker sends location data via TCP, Locus received data via HTTP GET. One port is used for handling both requests. Data from tracker is saved in the log file, converted to GPX format and sent back to Locus. In case of lost connection, the last position is displayed on the screen along with the track.
+
+## Deploy
+Copy
+* decoder.js
+* gpx-builder.js
+* gpx-footer.txt
+* gpx-header.txt
+* package.json
+* server.js
+* data
+
+Run
+```
+node server.js
+```
+
