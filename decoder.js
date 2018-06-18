@@ -2,7 +2,7 @@
 // Copyright © 2018 Andrey Svetlichny. All rights reserved.
 // Licensed under the Apache License, Version 2.0
 
-module.exports = class DecoderGT06 {
+class DecoderGT06 {
     static decodeGpsData(data, login, location, error) {
         while (data.length > 0) {
             // console.log('data.length=' + data.length);
@@ -67,4 +67,5 @@ module.exports = class DecoderGT06 {
             };
         }
     };
-};
+}
+module.exports = DecoderGT06;

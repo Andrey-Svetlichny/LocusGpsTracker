@@ -19,6 +19,7 @@ Copy
 * gpx-builder.js
 * gpx-footer.txt
 * gpx-header.txt
+* logger.js
 * package.json
 * server.js
 * data
