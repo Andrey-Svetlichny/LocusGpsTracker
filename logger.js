@@ -13,25 +13,39 @@ class Logger {
         this.gpxBuilder = new GpxBuilder('./data/tmp-content.gpx');
         this.points = [];
         this.maxPoints = 1000;
-        this.lastLocation = {};
+        this._status = {};
         const path = this.getLogPath();
-        if (fs.existsSync(path))
-            this.processData(fs.readFileSync(path));
+        if (fs.existsSync(path)) {
+            this.addRaw(fs.readFileSync(path), true);
+            this._status = {};
+        }
     }
 
-    addRaw(data) {
-        const path = this.getLogPath();
-        fs.appendFileSync(path, data);
-        this.processData(data);
+    status() {
+        return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset=utf-8>\n<title>Info</title>\n</head>\n<body>\n' +
+            '<h1>Tracker status</h1>' +
+            '<pre style="font-size:18px">' +
+            'LastFix = ' + (this._status.LastFix ? this._status.LastFix.toLocaleTimeString() : '-') + '\r\n' +
+            'LastMsg = ' + (this._status.LastMsg ? this._status.LastMsg.toLocaleTimeString() : '-') + '\r\n' +
+            'Now     = ' + new Date().toLocaleTimeString() +
+            '</pre>' +
+        '</body>\n</html>';
     }
 
-    processData(data) {
+    addRaw(data, nolog) {
+        if (!nolog) {
+            fs.appendFileSync(this.getLogPath(), data);
+        }
         DecoderGT06.decodeGpsData(data,
             login => Logger.logLogin(login),
             loc => { Logger.logLocation(loc);
-                // if (this.lastLocation && this.lastLocation.lat === loc.lat && this.lastLocation.lon === loc.lon)
-                this.points.push(this.gpxBuilder.location(loc));
-                this.points = this.points.slice(0, this.maxPoints);
+                let date = new Date();
+                this._status.LastMsg = date;
+                if( loc.lat !== 0 ) {
+                    this._status.LastFix = date;
+                    this.points.push(this.gpxBuilder.location(loc));
+                    this.points = this.points.slice(-this.maxPoints);
+                }
             },
             error => Logger.logError(error)
         );

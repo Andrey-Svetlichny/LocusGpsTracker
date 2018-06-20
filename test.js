@@ -6,13 +6,15 @@ const fs = require('fs');
 const Logger = require('./logger');
 const logger = new Logger();
 
+process.env.TZ = 'Europe/Moscow';
 
 const data = fs.readFileSync('./test-data/track.bin');
 
-logger.addRaw(data);
+// logger.addRaw(data);
 console.log('*** - ***');
 
-console.log(logger.getGpx());
+console.log(logger.status());
+// console.log(logger.getGpx());
 
 // const gpxBuilder = new GpxBuilder('./test-data/tmp-content.gpx');
 // DecoderGT06.decodeGpsData(data,

@@ -2,6 +2,8 @@
 // Copyright © 2018 Andrey Svetlichny. All rights reserved.
 // Licensed under the Apache License, Version 2.0
 
+process.env.TZ = 'Europe/Moscow'; // does not work in windows
+
 const net = require('net');
 const Logger = require('./logger');
 const logger = new Logger();
@@ -11,7 +13,15 @@ const server = net.createServer((c) => {
     c.on('end', () => console.log('client disconnected'));
     c.on('data', (data) => {
         console.log('data');
-        if(('' + data).startsWith('GET /')) { // Locus connected via HTTP - send GPX file
+        if(('' + data).startsWith('GET /status ')) { // Browser connected via HTTP - send status page
+            console.log('HTTP GET /status');
+            c.write(
+                'HTTP/1.1 200 OK\r\n' +
+                'Cache-Control: public, max-age=0\r\n' +
+                'Content-type: text/html\r\n' +
+                '\r\n');
+            c.end(logger.status());
+        } else if(('' + data).startsWith('GET /')) { // Locus connected via HTTP - send GPX file
             console.log('HTTP GET');
             const gpx = logger.getGpx();
             c.write(
