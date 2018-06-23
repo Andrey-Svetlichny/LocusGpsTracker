@@ -51,8 +51,10 @@ class Logger {
         );
     }
 
-    getGpx() {
-        return this.gpxBuilder.header() + this.points.join(' ') + this.gpxBuilder.footer();
+    // limit - max number of points in the track (1..maxPoints)
+    getGpx(limit) {
+        const p = (limit > 0 && limit < this.maxPoints) ? this.points.slice(-limit) : this.points;
+        return this.gpxBuilder.header() + p.join(' ') + this.gpxBuilder.footer();
     }
 
     getLogPath() {
